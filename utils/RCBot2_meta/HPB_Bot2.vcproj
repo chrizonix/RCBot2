@@ -32,11 +32,6 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life deathmatch source\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\team fortress 2\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\synergy\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\day of defeat source\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\steamcmd\tf2\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;"
-				Outputs="c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life deathmatch source\bin\HPB_Bot2.dll;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\team fortress 2\bin\HPB_Bot2.dll;c:\Program Files (x86)\Steam\steam-apps\paul.murphy@ntlworld.com\synergy\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\day of defeat source\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2.dll;C:\steamcmd\tf2\bin\HPB_Bot2.dll"
-			/>
-			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -54,8 +49,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;HOMEFOLDER"
+				AdditionalIncludeDirectories="..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;../metamod-source-mmsource-1.10.4/public;../metamod-source-mmsource-1.10.4/core;../metamod-source-mmsource-1.10.4/core/sourcehook"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
@@ -137,11 +132,6 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life deathmatch source\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\team fortress 2\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\synergy\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\day of defeat source\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\xxrcinstall\files\HPB_Bot2.dll&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)\update.txt&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\xxrcinstall\files\rcbot2\manual\version.txt&quot;&#x0D;&#x0A;"
-				Outputs="c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life deathmatch source\bin\HPB_Bot2.dll;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\team fortress 2\bin\HPB_Bot2.dll;c:\Program Files (x86)\Steam\steam-apps\paul.murphy@ntlworld.com\synergy\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\day of defeat source\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2.dll"
-			/>
-			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -162,7 +152,7 @@
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server"
+				AdditionalIncludeDirectories="..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;../metamod-source-mmsource-1.10.4/public;../metamod-source-mmsource-1.10.4/core;../metamod-source-mmsource-1.10.4/core/sourcehook"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;HOMEFOLDER"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -247,11 +237,6 @@
 				Name="VCPreBuildEventTool"
 			/>
 			<Tool
-				Name="VCCustomBuildTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life deathmatch source\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\team fortress 2\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\synergy\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\day of defeat source\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\xxrcinstall\files\HPB_Bot2o.dll&quot;&#x0D;&#x0A;copy &quot;$(ProjectDir)\update.txt&quot; &quot;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\xxrcinstall\files\rcbot2\manual\version.txt&quot;&#x0D;&#x0A;"
-				Outputs="c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life deathmatch source\bin\HPB_Bot2o.dll;c:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\team fortress 2\bin\HPB_Bot2o.dll;c:\Program Files (x86)\Steam\steam-apps\paul.murphy@ntlworld.com\synergy\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy@ntlworld.com\day of defeat source\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2o.dll"
-			/>
-			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
@@ -272,7 +257,7 @@
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server"
+				AdditionalIncludeDirectories="..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;../metamod-source-mmsource-1.10.4/public;../metamod-source-mmsource-1.10.4/core;../metamod-source-mmsource-1.10.4/core/sourcehook"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -428,10 +413,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\bot_main.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\bot_menu.cpp"
 				>
 			</File>
@@ -521,6 +502,21 @@
 			</File>
 			<File
 				RelativePath=".\bot_zombie.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\bot_sigscan.cpp"
+
+				>
+			</File>
+			<File
+				RelativePath=".\bot_cvars.cpp"
+
+				>
+			</File>
+			<File
+				RelativePath=".\bot_plugin_meta.cpp"
+
 				>
 			</File>
 		</Filter>

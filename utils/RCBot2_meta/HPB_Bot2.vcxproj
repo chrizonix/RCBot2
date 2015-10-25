@@ -62,8 +62,6 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\Debug\</OutDir>
-    <IntDir>.\Debug\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,11 +76,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CustomBuildStep>
-      <Command>copy $(TargetPath) "C:\Program Files (x86)\Steam\SteamApps\common\team fortress 2\tf\addons\rcbot2meta.dll"
-copy $(TargetPath) "C:\Program Files (x86)\Steam\SteamApps\common\Half-Life 2 Deathmatch\hl2mp\addons\rcbot2meta.dll"
-copy $(TargetPath) "C:\Program Files (x86)\Steam\SteamApps\common\Day of Defeat Source\dod\addons\rcbot2meta.dll"
-</Command>
-      <Outputs>C:\Program Files (x86)\Steam\SteamApps\common\team fortress 2\tf\addons\rcbot2meta.dll;C:\Program Files (x86)\Steam\SteamApps\common\Half-Life 2 Deathmatch\hl2mp\addons\rcbot2meta.dll;C:\Program Files (x86)\Steam\SteamApps\common\Day of Defeat Source\dod\addons\rcbot2meta.dll;%(Outputs)</Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -94,17 +89,13 @@ copy $(TargetPath) "C:\Program Files (x86)\Steam\SteamApps\common\Day of Defeat 
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\metamod-source-mmsource-1.10.4\core\;..\metamod-source-mmsource-1.10.4\core\sourcehook\;..\metamod-source-mmsource-1.10.4\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\metamod-source-mmsource-1.10.6\core\;..\metamod-source-mmsource-1.10.6\core\sourcehook\;..\metamod-source-mmsource-1.10.6\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;_DEBUG;_WINDOWS;HOMEFOLDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeaderOutputFile>.\Debug/HPB_bot2.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -117,41 +108,20 @@ copy $(TargetPath) "C:\Program Files (x86)\Steam\SteamApps\common\Day of Defeat 
     <Link>
       <AdditionalDependencies>
       </AdditionalDependencies>
-      <OutputFile>.\Debug/rcbot2meta.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib\public;..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/HPB_bot2.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>.\Debug/HPB_bot2.map</MapFileName>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>.\Debug/HPB_bot2.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "C:\Program Files (x86)\Steam\SteamApps\common\team fortress 2\tf\addons\rcbot2meta.dll"</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Copying File</Message>
-    </PostBuildEvent>
+    <PostBuildEvent />
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" "c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life deathmatch source\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\team fortress 2\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\synergy\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\day of defeat source\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\xxrcinstall\files\HPB_Bot2.dll"
-copy "$(ProjectDir)\update.txt" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\xxrcinstall\files\rcbot2\manual\version.txt"
-</Command>
-      <Outputs>c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life deathmatch source\bin\HPB_Bot2.dll;c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\team fortress 2\bin\HPB_Bot2.dll;c:\Program Files (x86)\Steam\steam-apps\paul.murphy%40ntlworld.com\synergy\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\day of defeat source\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2.dll;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2.dll;%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -165,19 +135,15 @@ copy "$(ProjectDir)\update.txt" "C:\Program Files (x86)\Steam\steamapps\paul.mur
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\metamod-source-mmsource-1.10.4\core\;..\metamod-source-mmsource-1.10.4\core\sourcehook\;..\metamod-source-mmsource-1.10.4\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\metamod-source-mmsource-1.10.6\core\;..\metamod-source-mmsource-1.10.6\core\sourcehook\;..\metamod-source-mmsource-1.10.6\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;NDEBUG;_WINDOWS;HOMEFOLDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <PrecompiledHeaderOutputFile>.\Release/HPB_bot2.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -189,18 +155,13 @@ copy "$(ProjectDir)\update.txt" "C:\Program Files (x86)\Steam\steamapps\paul.mur
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <OutputFile>.\Release/rcbot2meta.dll</OutputFile>
+      <AdditionalDependencies>tier0.lib;tier1.lib;tier2.lib;tier3.lib;mathlib.lib;vstdlib.lib;</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib\public;..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Release/HPB_bot2.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>.\Release/HPB_bot2.map</MapFileName>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>.\Release/HPB_bot2.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>

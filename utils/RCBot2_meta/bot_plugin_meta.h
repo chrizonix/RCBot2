@@ -49,6 +49,7 @@
 #include <iplayerinfo.h>
 #include <sh_vector.h>
 #include "engine_wrappers.h"
+#include <shareddefs.h>
 
 class CUserCmd;
 class IMoveHelper;
@@ -112,12 +113,16 @@ public: //hooks
 	static void giveRandomLoadout(edict_t *pPlayer, int iClass, int iSlot, void *pVTable, void *pVTable_Attributes);
 	static void TF2_equipWearable(edict_t *pPlayer, CBaseEntity *pWearable);
 	static bool TF2_ClearAttributeCache(edict_t *pEdict);
+
 	static void HudTextMessage(edict_t *pEntity, const char *szMessage);
+	static void BroadcastTextMessage(const char *szMessage);
+
 #if SOURCE_ENGINE >= SE_ORANGEBOX
 	void Hook_ClientCommand(edict_t *pEntity, const CCommand &args);
 #else
 	void Hook_ClientCommand(edict_t *pEntity);
 #endif
+
 public:
 
 	const char *GetAuthor();
@@ -134,6 +139,12 @@ public:
 
 private:
 	int m_iClientCommandIndex;
+
+	// Bot Quota
+	float m_fBotQuotaTimer;
+	int m_iTargetBots[MAX_PLAYERS];
+
+	void BotQuotaCheck( void );
 };
 
 extern RCBotPluginMeta g_RCBotPluginMeta;
