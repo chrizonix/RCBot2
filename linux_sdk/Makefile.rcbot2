@@ -74,7 +74,7 @@ USER_CFLAGS= -std=c++0x -w -D__linux -g -D_DEBUG -DDEBUG -DSH_DEBUG # -DTF2_HOOK
 #LDFLAGS="-lm -ldl $(LIBFILES) $(LIBFILES)"
 LIB_DIR = $(SOURCE_DIR)/lib/linux
 #LDFLAGS = "-m32 -lm -ldl  $(LIB_DIR)/mathlib_i486.a libtier0.so libvstdlib.so  $(LIB_DIR)/tier1_i486.a $(LIB_DIR)/tier2_i486.a $(LIB_DIR)/tier3_i486.a "
-LDFLAGS = "-m32 -lm -ldl -Wl,-no-undefined -L. -L$(LIB_DIR) -Wl,-soname -Wl,--no-as-needed -l:mathlib_i486.a -l:libtier0_srv.so -l:tier1_i486.a -l:tier2_i486.a -l:tier3_i486.a -l:libvstdlib_srv.so"
+LDFLAGS = "-m32 -lm -ldl -Wl,-no-undefined -L. -L$(LIB_DIR) -Wl,-soname -Wl,--no-as-needed -l:mathlib_i486.a -l:libtier0_srv.so -l:tier1_i486.a -l:tier2_i486.a -l:tier3_i486.a -l:libvstdlib_srv.so -lpthread"
 
 # XERCES 2.6.0 or above ( [url=http://xml.apache.org/xerces-c/]http://xml.apache.org/xerces-c/[/url] ) is used by the vcproj to makefile converter
 # it must be installed before being able to run this makefile
