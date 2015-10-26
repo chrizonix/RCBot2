@@ -1752,7 +1752,6 @@ void CBotTF2 :: spawnInit()
 	//m_pPushPayloadBomb = NULL;
 	//m_pDefendPayloadBomb = NULL;
 
-	m_bFixWeapons = true;
 	m_iPrevWeaponSelectFailed = 0;
 
 	m_fCheckNextCarrying = 0.0;
@@ -1770,11 +1769,6 @@ bool CBotTF2 ::checkAttackPoint()
 	}
 
 	return false;
-}
-
-void CBotTF2 :: fixWeapons ()
-{
-
 }
 
 void CBotTF2 :: setClass ( TF_Class _class )
@@ -2987,14 +2981,6 @@ void CBotTF2::modThink()
 
 	m_fIdealMoveSpeed = CTeamFortress2Mod::TF2_GetPlayerSpeed(m_pEdict, m_iClass)*rcbot_speed_boost.GetFloat();
 
-	// refind my weapons, if i couldn't select them
-	//if ( m_bFixWeapons || (m_iPrevWeaponSelectFailed>2) )
-	//{
-	//	fixWeapons();
-	//	m_bFixWeapons = false;
-	//	m_iPrevWeaponSelectFailed = 0;
-	//}//
-
 
 	/* spy check code */
 	if (((m_iClass != TF_CLASS_SPY) || (!isDisguised())) && ((m_pEnemy.get() == NULL) || !hasSomeConditions(CONDITION_SEE_CUR_ENEMY)) && (m_pPrevSpy.get() != NULL) && (m_fSeeSpyTime > engine->Time()) &&
@@ -3362,6 +3348,8 @@ void CBotTF2::handleWeapons()
 
 		setLookAtTask(LOOK_ENEMY);
 
+		m_pAttackingEnemy = NULL;
+
 		if ( m_bWantToChangeWeapon && (pWeapon != NULL) && (pWeapon != getCurrentWeapon()) && pWeapon->getWeaponIndex() )
 		{
 			//selectWeaponSlot(pWeapon->getWeaponInfo()->getSlot());
@@ -3459,10 +3447,12 @@ bool CBotTF2::canAvoid(edict_t *pEntity)
 
 	if ( ( distance > 1 ) && ( distance < bot_avoid_radius.GetFloat() ) && (vAvoidOrigin.z >= getOrigin().z) && (fabs(getOrigin().z - vAvoidOrigin.z) < 64) )
 	{
-		if ( isEnemy(pEntity,false) )
+		if ((m_pAttackingEnemy.get()!=NULL) && (m_pAttackingEnemy.get() == pEntity))
+			return false; // I need to melee this guy probably
+		else if (isEnemy(pEntity, false))
 			return true;
-		else 
-			return (pEntity==m_pSentryGun.get())||(pEntity==m_pDispenser.get());
+		else if ((m_iClass == TF_CLASS_ENGINEER) && ((pEntity == m_pSentryGun.get()) || (pEntity == m_pDispenser.get())))
+			return true;
 	}
 
 	return false;
@@ -4492,8 +4482,11 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 	}
 
 	pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_WRENCH));
-	iMetal = pWeapon->getAmmo(this);
-	fMetalPercent = (float)iMetal/200;
+	if (pWeapon != NULL)
+	{
+		iMetal = pWeapon->getAmmo(this);
+		fMetalPercent = (float)iMetal / 200;
+	}
 
 	if ( bNeedAmmo || bNeedHealth )
 	{
@@ -4782,8 +4775,8 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		(CTeamFortress2Mod::getFlagCarrierTeam()==CTeamFortress2Mod::getEnemyTeam(iTeam)))) &&
 		(m_fLastKnownTeamFlagTime && (m_fLastKnownTeamFlagTime > engine->Time())), 
 		fDefendFlagUtility+(randomFloat(0.0,0.2)-0.1));
-	ADD_UTILITY(BOT_UTIL_SNIPE, (iClass==TF_CLASS_SNIPER) && m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_SNIPERRIFLE))->hasWeapon() && !m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_SNIPERRIFLE))->outOfAmmo(this) && !hasSomeConditions(CONDITION_PARANOID) && !bHasFlag && (getHealthPercent()>0.2f), 0.95);	
-	ADD_UTILITY(BOT_UTIL_SNIPE_CROSSBOW, (iClass == TF_CLASS_SNIPER) && m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_BOW))->hasWeapon() && !m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_BOW))->outOfAmmo(this) && !hasSomeConditions(CONDITION_PARANOID) && !bHasFlag && (getHealthPercent()>0.2f), 0.95);
+	ADD_UTILITY(BOT_UTIL_SNIPE, (iClass == TF_CLASS_SNIPER) && m_pWeapons->hasWeapon(TF2_WEAPON_SNIPERRIFLE) && !m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_SNIPERRIFLE))->outOfAmmo(this) && !hasSomeConditions(CONDITION_PARANOID) && !bHasFlag && (getHealthPercent()>0.2f), 0.95);
+	ADD_UTILITY(BOT_UTIL_SNIPE_CROSSBOW, (iClass == TF_CLASS_SNIPER) && m_pWeapons->hasWeapon(TF2_WEAPON_BOW) && !m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_BOW))->outOfAmmo(this) && !hasSomeConditions(CONDITION_PARANOID) && !bHasFlag && (getHealthPercent()>0.2f), 0.95);
 
 	ADD_UTILITY(BOT_UTIL_ROAM,true,0.0001f);
 	ADD_UTILITY_DATA(BOT_UTIL_FIND_NEAREST_HEALTH,!bHasFlag&&bNeedHealth&&!m_pHealthkit&&pWaypointHealth,(1000.0f/fHealthDist) + ((!CTeamFortress2Mod::hasRoundStarted() && CTeamFortress2Mod::isMapType(TF_MAP_MVM))?0.5f:0.0f),CWaypoints::getWaypointIndex(pWaypointHealth));
@@ -5478,7 +5471,7 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 						{
 							CBotWeapon *pWeapon = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_GRENADELAUNCHER));
 
-							if ( !pWeapon->outOfAmmo(this) )
+							if (pWeapon && !pWeapon->outOfAmmo(this))
 							{
 								CBotTF2Spam *spam = new CBotTF2Spam(this,pWaypoint->getOrigin(),pWaypoint->getAimYaw(),pWeapon);
 
@@ -7050,6 +7043,8 @@ bool CBotTF2 :: handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy )
 	else
 		primaryAttack();
 
+	m_pAttackingEnemy = pEnemy;
+
 	return true;
 }
 
@@ -7711,6 +7706,23 @@ void CBotTF2 :: sapperDestroyed ( edict_t *pSapper )
 	m_pSchedules->freeMemory();
 }
 
+CBotWeapon *CBotTF2::getCurrentWeapon()
+{
+	edict_t *pWeapon = CClassInterface::TF2_getActiveWeapon(m_pEdict);
+
+	if (pWeapon && !pWeapon->IsFree())
+	{
+		const char *pszClassname = pWeapon->GetClassName();
+
+		if (pszClassname && *pszClassname)
+		{
+			return m_pWeapons->getActiveWeapon(pszClassname,pWeapon,overrideAmmoTypes());
+		}
+	}
+
+	return NULL;
+}
+
 CBotTF2::CBotTF2() 
 { 
 		CBotFortress(); 
@@ -7738,7 +7750,7 @@ CBotTF2::CBotTF2()
 		m_pPushPayloadBomb = NULL;
 		m_pRedPayloadBomb = NULL;
 		m_pBluePayloadBomb = NULL;
-		m_bFixWeapons = false;
+
 		m_iTrapType = TF_TRAP_TYPE_NONE;
 		m_pLastEnemySentry = MyEHandle(NULL);
 		m_prevSentryHealth = 0;

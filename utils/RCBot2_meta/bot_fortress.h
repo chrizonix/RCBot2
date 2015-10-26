@@ -616,7 +616,14 @@ public:
 	virtual bool isCloaked () { return false; }
 	virtual bool isDisguised () { return false; }
 
+	virtual CBotWeapon *getCurrentWeapon()
+	{
+		return CBot::getCurrentWeapon();
+	}
+
 	virtual bool handleAttack ( CBotWeapon *pWeapon, edict_t *pEnemy ) { return CBot::handleAttack(pWeapon,pEnemy); }
+	
+	void resetAttackingEnemy() { m_pAttackingEnemy = NULL; }
 
 	virtual bool setVisible ( edict_t *pEntity, bool bVisible );
 
@@ -780,6 +787,7 @@ protected:
 	MyEHandle m_pNearestEnemyDisp;
 	MyEHandle m_pNearestTeleEntrance;
 	MyEHandle m_pNearestPipeGren;
+	MyEHandle m_pAttackingEnemy;
 
 	MyEHandle m_pFlag;
 	MyEHandle m_pPrevSpy;
@@ -904,6 +912,8 @@ public:
 	// 
 	CBotTF2();
 
+	virtual CBotWeapon *getCurrentWeapon();
+
 	void onInventoryApplication();
 
 	void giveWeapon ( int slot, int index );
@@ -927,8 +937,6 @@ public:
 	void enemyFound (edict_t *pEnemy);
 
 	void enemyAtIntel ( Vector vPos, int type = EVENT_FLAG_PICKUP, int iArea = -1 );
-	//
-	void fixWeapons ();
 
 	bool isTF2 () { return true; }
 
@@ -1113,7 +1121,7 @@ private:
 	MyEHandle m_pRedPayloadBomb;
 	MyEHandle m_pBluePayloadBomb;
 	//
-	bool m_bFixWeapons;
+
 	// if demoman has already deployed stickies this is true
 	// once the demoman explodes them then this becomes false
 	// and it can deploy stickies again

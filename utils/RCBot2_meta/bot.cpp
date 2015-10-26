@@ -1903,7 +1903,7 @@ void CBot :: updateStatistics ()
 
 		m_StatsCanUse.data = m_Stats.data;
 		m_Stats.data = 0;
-		m_iStatsIndex = 0; // reset to be sure in case of m_iStatsIndex > gpGlobals->maxClients
+		m_iStatsIndex = 1; // reset to be sure in case of m_iStatsIndex > gpGlobals->maxClients
 
 		if ( !m_uSquadDetail.b1.said_area_clear && (m_StatsCanUse.stats.m_iEnemiesInRange == 0) && (m_StatsCanUse.stats.m_iEnemiesVisible == 0) && (m_StatsCanUse.stats.m_iTeamMatesInRange > 0))
 		{
@@ -1914,12 +1914,10 @@ void CBot :: updateStatistics ()
 		}
 	}
 
-	CClient *pClient = CClients::get(m_iStatsIndex++);
+	edict_t *pPlayer = INDEXENT(m_iStatsIndex++);
 
-	if ( !pClient->isUsed() )
-		return;
-
-	edict_t *pPlayer = pClient->getPlayer();
+	if (!pPlayer || !pPlayer->IsFree())
+		return; // not valid
 
 	if ( pPlayer == m_pEdict )
 		return; // don't listen to self
