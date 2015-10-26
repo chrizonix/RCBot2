@@ -9,13 +9,13 @@ A complete guide for installing this plugin can be found at the official RCBot2 
 This thread is also maintained by me.
 
 ### Build
-* Go to "linux_sdk"
-* Type "make -f Makefile.rcbot2 vcpm"
-* Type "make -f Makefile.rcbot2 genmf" (this will generate the Makefiles)
-* Edit "Makefile.rcbot2" and "Makefile.HPB\_bot2\_\*" according to your needs
-  * Most of the time you will only need to modify Line 21 and 55 of "Makefile.rcbot2"
-* Type "make -f Makefile.rcbot2 all -j4 2\> error.log"
-* Check the error.log
+* Go to `linux_sdk`
+* Type `make -f Makefile.rcbot2 vcpm`
+* Type `make -f Makefile.rcbot2 genmf` (this will generate the Makefiles)
+* Edit `Makefile.rcbot2` and `Makefile.HPB\_bot2\_\*` according to your needs
+  * Most of the time you will only need to modify Line 21 and 55 of `Makefile.rcbot2`
+* Type `make -f Makefile.rcbot2 all -j4 2\> error.log`
+* Check the `error.log`
 
 ### Changelog
 * Fixed a bug in getNextRoutePoint, which destroyed bot aiming, because of invalid vLook
