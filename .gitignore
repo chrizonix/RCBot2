@@ -6,3 +6,13 @@
 .cproject
 .buildpath
 
+###############
+## Generated ##
+###############
+
+utils/RCBot2_meta/Debug
+utils/RCBot2_meta/Release
+utils/RCBot2_meta/Release_NonHomeFolder
+
+utils/RCBot2_meta/HPB_Bot2.opensdf
+utils/RCBot2_meta/HPB_Bot2.sdf

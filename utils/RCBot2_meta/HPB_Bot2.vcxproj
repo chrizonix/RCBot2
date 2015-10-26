@@ -65,13 +65,9 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\Release\</OutDir>
-    <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NonHomeFolder|Win32'">
-    <OutDir>$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -166,20 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_NonHomeFolder|Win32'">
-    <CustomBuildStep>
-      <Command>copy "$(TargetPath)" "c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life deathmatch source\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\team fortress 2\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\synergy\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\day of defeat source\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2o.dll"
-copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\xxrcinstall\files\HPB_Bot2o.dll"
-copy "$(ProjectDir)\update.txt" "C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\xxrcinstall\files\rcbot2\manual\version.txt"
-</Command>
-      <Outputs>c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life deathmatch source\bin\HPB_Bot2o.dll;c:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\team fortress 2\bin\HPB_Bot2o.dll;c:\Program Files (x86)\Steam\steam-apps\paul.murphy%40ntlworld.com\synergy\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\half-life 2 deathmatch\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\paul.murphy%40ntlworld.com\day of defeat source\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\common\Day of Defeat Source\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\common\Half-Life 2 Deathmatch\bin\HPB_Bot2o.dll;C:\Program Files (x86)\Steam\steamapps\common\team fortress 2\bin\HPB_Bot2o.dll;%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -193,23 +176,20 @@ copy "$(ProjectDir)\update.txt" "C:\Program Files (x86)\Steam\steamapps\paul.mur
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\public\mathlib;..\..\public;..\..\public\engine;..\..\public\tier0;..\..\public\tier1;..\..\dlls;..\..\game_shared;..\..\game\shared;..\..\game\server;..\..\public\game\server;..\metamod-source-mmsource-1.10.6\core\;..\metamod-source-mmsource-1.10.6\core\sourcehook\;..\metamod-source-mmsource-1.10.6\public\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SOURCE_ENGINE=4;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <PrecompiledHeaderOutputFile>.\Release_NonHomeFolder/HPB_bot2.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release_NonHomeFolder/</AssemblerListingLocation>
-      <ObjectFileName>.\Release_NonHomeFolder/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release_NonHomeFolder/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <OmitDefaultLibName>false</OmitDefaultLibName>
+      <AdditionalOptions>/D SE_EPISODEONE=1 /D SE_DARKMESSIAH=2 /D SE_ORANGEBOX=3 /D SE_ORANGEBOXVALVE=4 /D SE_LEFT4DEAD=5 /D SE_LEFT4DEAD2=6 /D SE_ALIENSWARM=7 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -217,16 +197,12 @@ copy "$(ProjectDir)\update.txt" "C:\Program Files (x86)\Steam\steamapps\paul.mur
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>tier0.lib;tier1.lib;tier2.lib;tier3.lib;mathlib.lib;vstdlib.lib</AdditionalDependencies>
-      <OutputFile>.\Release_NonHomeFolder/HPB_bot2o.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\lib\public;..\..\lib\common;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Release_NonHomeFolder/HPB_bot2.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>.\Release_NonHomeFolder/HPB_bot2.map</MapFileName>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>.\Release_NonHomeFolder/HPB_bot2.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
