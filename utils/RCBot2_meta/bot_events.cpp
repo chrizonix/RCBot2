@@ -1304,23 +1304,25 @@ void CBotEvents :: executeEvent( void *pEvent, eBotEventType iType )
 	{
 		pFound = m_theEvents[i];
 
-		// if it has an pEvent id stored just check that
-		//if ( ( iType != TYPE_IGAMEEVENT ) && pFound->hasEventId() )
-		//	bFound = pFound->isEventId(iEventId);
-		//else
-		bFound = pFound->forCurrentMod() && pFound->isType(pInterface->getName());
+		if (pFound != NULL) {
+			// if it has an pEvent id stored just check that
+			//if ( ( iType != TYPE_IGAMEEVENT ) && pFound->hasEventId() )
+			//	bFound = pFound->isEventId(iEventId);
+			//else
+			bFound = pFound->forCurrentMod() && pFound->isType(pInterface->getName());
 
-		if ( bFound )	
-		{
-			int userid = pInterface->getInt("userid",-1);
-			// set pEvent id for quick checking
-			pFound->setEventId(iEventId);
+			if (bFound)
+			{
+				int userid = pInterface->getInt("userid", -1);
+				// set pEvent id for quick checking
+				pFound->setEventId(iEventId);
 
-			pFound->setActivator((userid>=0)?CBotGlobals::playerByUserId(userid):NULL);
+				pFound->setActivator((userid >= 0) ? CBotGlobals::playerByUserId(userid) : NULL);
 
-			pFound->execute(pInterface);
+				pFound->execute(pInterface);
 
-			break;
+				break;
+			}
 		}
 	}
 
