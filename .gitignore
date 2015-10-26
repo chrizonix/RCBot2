@@ -17,7 +17,8 @@ utils/RCBot2_meta/Release_NonHomeFolder
 utils/RCBot2_meta/HPB_Bot2.opensdf
 utils/RCBot2_meta/HPB_Bot2.sdf
 
-linux_sdk/HPB_bot2_meta_i486.so
+linux_sdk/RCBot2Meta_i486.so
+linux_sdk/RCBot2MetaDebug_i486.so
 linux_sdk/Makefile.HPB_bot2_DebugWin32
 linux_sdk/Makefile.HPB_bot2_ReleaseWin32
 linux_sdk/Makefile.HPB_bot2_Release_NonHomeFolderWin32

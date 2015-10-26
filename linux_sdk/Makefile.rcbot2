@@ -9,7 +9,7 @@
 
 # the name of the mod binary (_i486.so is appended to the end)
 #NAME=server
-NAME=HPB_bot2_meta
+NAME=RCBot2MetaDebug
 
 # the location of the vcproj that builds the mod
 #MOD_PROJ=../game/server/server_hl2mp-2005.vcproj
