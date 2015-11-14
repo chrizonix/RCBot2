@@ -387,6 +387,24 @@ float CBotFortress :: getHealFactor ( edict_t *pPlayer )
 	float fHealthPercent;
 	Vector vVel = Vector(0,0,0);
 	int iHighestScore = CTeamFortress2Mod::getHighestScore();
+
+	if (!CBotGlobals::isPlayer(pPlayer))
+	{
+		if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
+		{
+			if (strcmp(pPlayer->GetClassName(), "entity_revive_marker") == 0)
+			{
+				float fDistance = distanceFrom(pPlayer);
+
+				if (fDistance < 0.1)
+					return 1000;
+				// in case of divide by zero
+				return 200.0f/fDistance;
+			}
+		}
+
+		return 0;
+	}
 	
 	CClassInterface::getVelocity(pPlayer,&vVel);
 
@@ -577,6 +595,27 @@ bool CBotFortress :: setVisible ( edict_t *pEntity, bool bVisible )
 					}
 				}
 			}
+			else
+			{
+				if ( CTeamFortress2Mod::isMapType(TF_MAP_MVM) && strcmp(pEntity->GetClassName(), "entity_revive_marker") == 0)
+				{
+					float fFactor = getHealFactor(pEntity);
+
+					if (!m_pHeal || (m_pHeal == pEntity) || (fFactor < m_fHealFactor))
+					{
+						m_fHealFactor = fFactor;
+						m_pHeal = pEntity;
+						updateCondition(CONDITION_SEE_HEAL);
+
+						if (!m_pSchedules->hasSchedule(SCHED_HEAL))
+						{
+							// not healing -- what am I doing?
+							m_pSchedules->freeMemory();
+							m_pSchedules->addFront(new CBotTF2HealSched(m_pHeal));
+						}
+					}
+				}
+			}
 		}
 		else if ( m_pHeal == pEntity )
 		{
@@ -726,7 +765,7 @@ void CBotFortress :: medicCalled(edict_t *pPlayer )
 			return; // already healing
 
 
-		if ( m_pHeal  )
+		if ( m_pHeal && CBotGlobals::isPlayer(m_pHeal) )
 		{
 			if ( CClassInterface::getPlayerHealth(pPlayer) >= CClassInterface::getPlayerHealth(m_pHeal) )
 				bGoto = false;
@@ -783,8 +822,14 @@ void CBotFortress :: died ( edict_t *pKiller, const char *pszWeapon )
 
 	droppedFlag();
 
-	if ( randomInt(0,1) )
-		m_pButtons->attack();
+	if (randomInt(0, 1))
+	{
+		if (!CTeamFortress2Mod::isMapType(TF_MAP_MVM) && (CTeamFortress2Mod::numClassOnTeam(m_iTeam, TF_CLASS_MEDIC)>0) )
+		{
+			// allow respawn
+			m_pButtons->attack();
+		}
+	}
 
 	m_bCheckClass = true;
 }
@@ -2786,16 +2831,19 @@ void CBotTF2::modThink()
 
 	extern ConVar rcbot_customloadouts;
 
+	// FIX: MUST Update class
+	m_iClass = (TF_Class)CClassInterface::getTF2Class(m_pEdict);
+
 	if (rcbot_customloadouts.GetBool() && m_pVTable && m_pVTable_Attributes && (m_fEquipHatTime > 0.0f) && (m_fEquipHatTime < engine->Time()))
 	{
 		// Equip
 		if (isAlive())
 		{
-			m_iClass = (TF_Class)CClassInterface::getTF2Class(m_pEdict);
-
 			if (isDesiredClass(m_iClass))
 			{
 				extern ConVar rcbot_melee_only;
+
+				bool bAdded = false;
 
 				if ((m_iClass == TF_CLASS_ENGINEER) && !CTeamFortress2Mod::isMedievalMode())
 					m_pMelee = NULL;
@@ -2835,18 +2883,25 @@ void CBotTF2::modThink()
 					m_pMisc = CTeamFortress2Mod::findRandomWeaponLoadOutInSlot(m_iClass, TF2_SLOT_MISC);
 
 				if (m_pMelee != NULL)
-					RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pMelee, TF2_SLOT_MELEE, m_pVTable, m_pVTable_Attributes);
+					bAdded = RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pMelee, TF2_SLOT_MELEE, m_pVTable, m_pVTable_Attributes);
 				if (m_pPrimary != NULL)
-					RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pPrimary, TF2_SLOT_PRMRY, m_pVTable, m_pVTable_Attributes);
+					bAdded |= RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pPrimary, TF2_SLOT_PRMRY, m_pVTable, m_pVTable_Attributes);
 				if (m_pSecondary != NULL)
-					RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pSecondary, TF2_SLOT_SCNDR, m_pVTable, m_pVTable_Attributes);
+					bAdded |= RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pSecondary, TF2_SLOT_SCNDR, m_pVTable, m_pVTable_Attributes);
 				if (m_pHat != NULL)
-					RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pHat, TF2_SLOT_HAT, m_pVTable, m_pVTable_Attributes);
+					bAdded |= RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pHat, TF2_SLOT_HAT, m_pVTable, m_pVTable_Attributes);
 				if (m_pMisc != NULL)
-					RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pMisc, TF2_SLOT_MISC, m_pVTable, m_pVTable_Attributes);
+					bAdded |= RCBotPluginMeta::givePlayerLoadOut(m_pEdict, m_pMisc, TF2_SLOT_MISC, m_pVTable, m_pVTable_Attributes);
 
 				m_fEquipHatTime = 0.0f;
 				m_bHatEquipped = true;
+
+				if (bAdded)
+				{
+					m_pSchedules->freeMemory(); // Could mess up weapons
+					m_pWeapons->resetSignature();
+					m_pWeapons->update(overrideAmmoTypes());
+				}
 			}
 		}
 	}
@@ -3882,6 +3937,10 @@ bool CBotTF2 :: setVisible ( edict_t *pEntity, bool bVisible )
 			m_pBluePayloadBomb = pEntity;
 			CTeamFortress2Mod::updateBluePayloadBomb(pEntity);
 		}
+		else if (CTeamFortress2Mod::isMapType(TF_MAP_MVM) && CTeamFortress2Mod::isTankBoss(pEntity))
+		{
+			CTeamFortress2Mod::checkMVMTankBoss(pEntity);
+		}
 	}
 
 	if ( bValid && bVisible )
@@ -4036,7 +4095,7 @@ bool CBotTF2::healPlayer()
 	static float fSpeed;
 	static CClient *pClient;
 
-	if (!m_pHeal)
+	if (!m_pHeal.get())
 		return false;
 
 	if (getHealFactor(m_pHeal) == 0.0f)
@@ -4045,6 +4104,16 @@ bool CBotTF2::healPlayer()
 	vOrigin = CBotGlobals::entityOrigin(m_pHeal);
 	pWeap = getCurrentWeapon();
 
+	if (!CBotGlobals::isPlayer(m_pHeal))
+	{
+		if (CBotGlobals::entityIsAlive(m_pHeal) && CBotGlobals::entityIsValid(m_pHeal))
+		{
+			if (strcmp(m_pHeal.get()->GetClassName(), "entity_revive_marker") == 0)
+				return true;
+		}
+		
+		return false;
+	}
 	//if ( (distanceFrom(vOrigin) > 250) && !isVisible(m_pHeal) ) 
 	//	return false;
 	p = playerinfomanager->GetPlayerInfo(m_pHeal);
@@ -4083,13 +4152,13 @@ bool CBotTF2::healPlayer()
 
 		m_vMedicPosition = vOrigin;
 
-
+		if ( CBotGlobals::isPlayer(m_pHeal) )
 		{
 			if (m_pNearestPipeGren.get() || m_NearestEnemyRocket.get())
 			{
 				m_iDesiredResistType = RESIST_EXPLO;
 			}
-			else if (CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pHeal) || CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict))
+			else if ( CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pHeal) || CTeamFortress2Mod::TF2_IsPlayerOnFire(m_pEdict))
 			{
 				m_iDesiredResistType = RESIST_FIRE;
 			}
@@ -4185,17 +4254,19 @@ bool CBotTF2::healPlayer()
 
 	m_pLastHeal = m_pHeal;
 
-	// Simple UBER check : healing player not ubered already
-	if ( !CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pHeal) && !CTeamFortress2Mod::isFlagCarrier(m_pHeal) && 
-		(m_pEnemy&&isVisible(m_pEnemy)) || (((((float)m_pPlayerInfo->GetHealth())/m_pPlayerInfo->GetMaxHealth())<0.33) || (getHealthPercent()<0.33) ))
+	if (CBotGlobals::isPlayer(m_pHeal))
 	{
-		if ( CTeamFortress2Mod::hasRoundStarted() )
+		// Simple UBER check : healing player not ubered already
+		if (!CTeamFortress2Mod::TF2_IsPlayerInvuln(m_pHeal) && !CTeamFortress2Mod::isFlagCarrier(m_pHeal) &&
+			(m_pEnemy&&isVisible(m_pEnemy)) || (((((float)m_pPlayerInfo->GetHealth()) / m_pPlayerInfo->GetMaxHealth()) < 0.33) || (getHealthPercent() < 0.33)))
 		{
-			// uber if ready / and round has started
-			m_pButtons->tap(IN_ATTACK2);
+			if (CTeamFortress2Mod::hasRoundStarted())
+			{
+				// uber if ready / and round has started
+				m_pButtons->tap(IN_ATTACK2);
+			}
 		}
 	}
-
 	return true;
 }
 // The lower the better
@@ -4649,17 +4720,23 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 
 			if ((m_fSpawnTime + 5.0f) > engine->Time())
 			{
+				if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
+				{
+					ADD_UTILITY(BOT_UTIL_BUILDTELENT, !m_bIsCarryingObj && !bHasFlag&&m_bEntranceVectorValid&&!m_pTeleEntrance && (iMetal >= 125), 0.95f);
+				}
+				else
+				{
+					dataUnconstArray<int> *failed;
+					Vector vOrigin = getOrigin();
 
-				dataUnconstArray<int> *failed;
-				Vector vOrigin = getOrigin();
+					m_pNavigator->getFailedGoals(&failed);
 
-				m_pNavigator->getFailedGoals(&failed);
+					failedlist = CWaypointLocations::resetFailedWaypoints(failed);
 
-				failedlist = CWaypointLocations::resetFailedWaypoints(failed);
+					pWaypointResupply = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(vOrigin, 1024.0f, -1, false, false, true, NULL, false, getTeam(), true, false, Vector(0, 0, 0), CWaypointTypes::W_FL_RESUPPLY));//CWaypoints::getWaypoint(CWaypoints::getClosestFlagged(CWaypointTypes::W_FL_RESUPPLY,vOrigin,iTeam,&fResupplyDist,failedlist));
 
-				pWaypointResupply = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(vOrigin, 1024.0f, -1, false, false, true, NULL, false, getTeam(), true, false, Vector(0, 0, 0), CWaypointTypes::W_FL_RESUPPLY));//CWaypoints::getWaypoint(CWaypoints::getClosestFlagged(CWaypointTypes::W_FL_RESUPPLY,vOrigin,iTeam,&fResupplyDist,failedlist));
-
-				ADD_UTILITY_DATA(BOT_UTIL_BUILDTELENT_SPAWN, !m_bIsCarryingObj && (pWaypointResupply != NULL) && !bHasFlag&&!m_pTeleEntrance && (iMetal >= 125), 0.95f, CWaypoints::getWaypointIndex(pWaypointResupply));
+					ADD_UTILITY_DATA(BOT_UTIL_BUILDTELENT_SPAWN, !m_bIsCarryingObj && (pWaypointResupply != NULL) && !bHasFlag&&!m_pTeleEntrance && (iMetal >= 125), 0.95f, CWaypoints::getWaypointIndex(pWaypointResupply));
+				}
 			}
 		}
 		// to do -- split into two
@@ -4924,40 +5001,33 @@ void CBotTF2 :: getTasks ( unsigned int iIgnore )
 		}
 	}
 
-	if( ( m_iClass==TF_CLASS_DEMOMAN ) && (m_iTrapType==TF_TRAP_TYPE_NONE) )
+	if ((m_iClass == TF_CLASS_DEMOMAN) && (m_iTrapType == TF_TRAP_TYPE_NONE) && canDeployStickies())
 	{
-		CBotWeapon *pPipe = m_pWeapons->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS));
+		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_LASTENEMY,m_pLastEnemy && 
+			(m_iTrapType==TF_TRAP_TYPE_NONE),
+			randomFloat(min(fDefendFlagUtility,fGetFlagUtility),max(fDefendFlagUtility,fGetFlagUtility)));
 
-		if ( pPipe && pPipe->hasWeapon() && !pPipe->outOfAmmo(this) )
-		{
-			ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_LASTENEMY,m_pLastEnemy && 
-				(m_iTrapType==TF_TRAP_TYPE_NONE) && canDeployStickies(),
-				randomFloat(min(fDefendFlagUtility,fGetFlagUtility),max(fDefendFlagUtility,fGetFlagUtility)));
+		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_FLAG,
+			CTeamFortress2Mod::isMapType(TF_MAP_CTF) && !bHasFlag && 
+			(!m_fLastKnownTeamFlagTime || (m_fLastKnownTeamFlagTime < engine->Time())),
+			fDefendFlagUtility+0.3f);
 
-			ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_FLAG,
-				CTeamFortress2Mod::isMapType(TF_MAP_CTF) && !bHasFlag && 
-				(!m_fLastKnownTeamFlagTime || (m_fLastKnownTeamFlagTime < engine->Time())) &&
-				canDeployStickies(),
-				fDefendFlagUtility+0.3f);
+		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_FLAG_LASTKNOWN,
+			(CTeamFortress2Mod::isMapType(TF_MAP_MVM)||CTeamFortress2Mod::isMapType(TF_MAP_CTF)||(CTeamFortress2Mod::isMapType(TF_MAP_SD) && 
+		(CTeamFortress2Mod::getFlagCarrierTeam()==CTeamFortress2Mod::getEnemyTeam(iTeam)))) && !bHasFlag && 
+			(m_fLastKnownTeamFlagTime && (m_fLastKnownTeamFlagTime > engine->Time())),fDefendFlagUtility+0.4f);
 
-			ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_FLAG_LASTKNOWN,
-				(CTeamFortress2Mod::isMapType(TF_MAP_MVM)||CTeamFortress2Mod::isMapType(TF_MAP_CTF)||(CTeamFortress2Mod::isMapType(TF_MAP_SD) && 
-			(CTeamFortress2Mod::getFlagCarrierTeam()==CTeamFortress2Mod::getEnemyTeam(iTeam)))) && !bHasFlag && 
-				(m_fLastKnownTeamFlagTime && (m_fLastKnownTeamFlagTime > engine->Time())) &&
-				canDeployStickies(),fDefendFlagUtility+0.4f);
+		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_POINT,(iTeam==TF2_TEAM_RED)&&(m_iCurrentDefendArea>0) && 
+			(CTeamFortress2Mod::isMapType(TF_MAP_MVM)||CTeamFortress2Mod::isMapType(TF_MAP_SD)||CTeamFortress2Mod::isMapType(TF_MAP_CART)||
+			CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE)||CTeamFortress2Mod::isMapType(TF_MAP_ARENA)||
+			CTeamFortress2Mod::isMapType(TF_MAP_KOTH)||CTeamFortress2Mod::isMapType(TF_MAP_CP)||
+			CTeamFortress2Mod::isMapType(TF_MAP_TC)),
+			fDefendFlagUtility+0.4f);
 
-			ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_POINT,(iTeam==TF2_TEAM_RED)&&(m_iCurrentDefendArea>0) && 
-				(CTeamFortress2Mod::isMapType(TF_MAP_MVM)||CTeamFortress2Mod::isMapType(TF_MAP_SD)||CTeamFortress2Mod::isMapType(TF_MAP_CART)||
-				CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE)||CTeamFortress2Mod::isMapType(TF_MAP_ARENA)||
-				CTeamFortress2Mod::isMapType(TF_MAP_KOTH)||CTeamFortress2Mod::isMapType(TF_MAP_CP)||
-				CTeamFortress2Mod::isMapType(TF_MAP_TC)) &&  canDeployStickies(),
-				fDefendFlagUtility+0.4f);
-
-			ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_PL,
-				(CTeamFortress2Mod::isMapType(TF_MAP_CART)||CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE)) && 
-				(m_pDefendPayloadBomb!=NULL) &&  canDeployStickies(),
-				fDefendFlagUtility+0.4f);
-		}
+		ADD_UTILITY(BOT_UTIL_DEMO_STICKYTRAP_PL,
+			(CTeamFortress2Mod::isMapType(TF_MAP_CART)||CTeamFortress2Mod::isMapType(TF_MAP_CARTRACE)) && 
+			(m_pDefendPayloadBomb!=NULL),
+			fDefendFlagUtility+0.4f);
 	}
 
 	//if ( !CTeamFortress2Mod::hasRoundStarted() && (iTeam == TF_TEAM_BLUE) )
@@ -5035,7 +5105,7 @@ bool CBotTF2 :: canDeployStickies ()
 
 	if ( pWeapon )
 	{
-		return ( pWeapon->getAmmo(this) >= 6 );
+		return (pWeapon->hasWeapon() && pWeapon->getAmmo(this) >= 6);
 	}
 
 	return false;
@@ -5739,10 +5809,16 @@ bool CBotTF2 :: executeAction ( CBotUtility *util )//eBotAction id, CWaypoint *p
 				pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(m_vDispenser,150,-1,true,false,true,NULL,false,getTeam(),true,false,Vector(0,0,0),CWaypointTypes::W_FL_SENTRY));
 				
 				// no use going back to this waypoint
-				if ( pWaypoint && (pWaypoint->getArea() > 0) && (pWaypoint->getArea() != m_iCurrentAttackArea) && (pWaypoint->getArea() != m_iCurrentDefendArea) )
+				if (pWaypoint && (pWaypoint->getArea() > 0) && (pWaypoint->getArea() != m_iCurrentAttackArea) && (pWaypoint->getArea() != m_iCurrentDefendArea))
+				{
 					pWaypoint = NULL;
+					m_bDispenserVectorValid = false;
+				}
+				else if (pWaypoint == NULL)
+					m_bDispenserVectorValid = false;
 			}
-			else if ( m_pSentryGun.get() != NULL )
+			
+			if ((pWaypoint == NULL) && (m_pSentryGun.get() != NULL))
 				pWaypoint = CWaypoints::getWaypoint(CWaypointLocations::NearestWaypoint(CBotGlobals::entityOrigin(m_pSentryGun),150,-1,true,false,true,NULL,false,getTeam(),true));			
 
 			if ( pWaypoint )
@@ -7179,6 +7255,19 @@ void CBotTF2::roundReset(bool bFullReset)
 	//CPoints::getAreas(getTeam(),&m_iCurrentDefendArea,&m_iCurrentAttackArea);
 
 	//m_pPayloadBomb = NULL;
+
+	if (CTeamFortress2Mod::isMapType(TF_MAP_MVM))
+	{
+		if (!CTeamFortress2Mod::wonLastRound(m_iTeam))
+		{
+			//lost - reset spawn time
+			m_fSpawnTime = engine->Time();
+			m_fSentryPlaceTime = 0.0f;
+			m_fDispenserPlaceTime = 0.0f;
+			spawnInit(); // bots will respawn
+		}
+	}
+
 }
 
 void CBotTF2::updateAttackDefendPoints()
@@ -7508,27 +7597,64 @@ void CBotTF2::MannVsMachineWaveComplete()
 	if ( (m_iClass != TF_CLASS_ENGINEER) || !isCarrying() )
 		m_pSchedules->freeMemory();
 
+	m_fLastKnownTeamFlagTime = 0.0f;
+	m_pPrevSpy = NULL;
+
+	flagReset();
+	teamFlagReset();
+
+	m_pNavigator->clear();
+
 	setLastEnemy(NULL);
 	
 	reload();
 	
-	m_fSentryPlaceTime = 1.0f;
-	m_fLastSentryEnemyTime = 0.0f;
-	
-	m_fDispenserPlaceTime = 1.0f;
+	if (m_pSentryGun.get() != NULL)
+	{
+		CWaypoint *pBest = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
+
+		if (!pBest || (pBest->distanceFrom(CBotGlobals::entityOrigin(m_pSentryGun)) > 768))
+		{
+			//move
+			m_fSentryPlaceTime = 1.0f;
+			m_fDispenserPlaceTime = 1.0f;
+			m_fLastSentryEnemyTime = 0.0f;
+			m_iSentryKills = 0;
+			m_fDispenserHealAmount = 0;
+		}
+	}
 }
 
 void CBotTF2::MannVsMachineAlarmTriggered(Vector vLoc)
 {
-
 	if ( m_iClass == TF_CLASS_ENGINEER )
 	{
 		edict_t *pSentry;
 
 		if ( (pSentry = m_pSentryGun.get()) != NULL )
 		{
-			if ( CTeamFortress2Mod::getSentryLevel(pSentry) < 3 )
+			if (CTeamFortress2Mod::getSentryLevel(pSentry) < 3)
+			{				
 				return;
+			}
+			else
+			{
+				if ((m_fLastSentryEnemyTime + 5.0f) > engine->Time())
+				{
+					CWaypoint *pWaypoint = CTeamFortress2Mod::getBestWaypointMVM(this, CWaypointTypes::W_FL_SENTRY);
+
+					Vector vSentry = CBotGlobals::entityOrigin(pSentry);
+
+					float fDist = pWaypoint->distanceFrom(vSentry);
+
+					if (fDist > 1024.0f)
+					{
+						// move sentry
+						m_iSentryKills = 0;
+						m_fSentryPlaceTime = 1.0f;
+					}
+				}
+			}
 
 			// don't defend work on sentry!!!
 		}

@@ -2672,7 +2672,7 @@ void CSpyCheckAir :: execute ( CBot *pBot, CBotSchedule *pSchedule )
 
 		pChooseWeapon = pWeaponList->getWeapon(CWeapons::getWeapon(TF2_WEAPON_FLAMETHROWER));
 		
-		if ( !pChooseWeapon->outOfAmmo(pBot) )
+		if (pChooseWeapon && pChooseWeapon->hasWeapon() && !pChooseWeapon->outOfAmmo(pBot))
 		{
 			// use flamethrower
 			iAttackProb = 90;
@@ -4467,6 +4467,13 @@ void CBotTF2DemomanPipeTrap :: execute (CBot *pBot,CBotSchedule *pSchedule)
 {
 	bool bFail = false;
 	CBotTF2 *pTF2Bot = (CBotTF2*)pBot;
+
+	if (pBot->getWeapons()->getWeapon(CWeapons::getWeapon(TF2_WEAPON_PIPEBOMBS)) == NULL)
+	{
+		// don't have the weapon
+		fail();
+		return;
+	}
 
 	pBot->wantToChangeWeapon(false);
 

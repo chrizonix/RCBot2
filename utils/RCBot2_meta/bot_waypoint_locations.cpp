@@ -494,7 +494,7 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 	
 	dataUnconstArray<int> *arr = &(m_iLocations[i][j][k]);
 	short int size = (short int)arr->Size();
-//	CBotMod *curmod = CBotGlobals::getCurrentMod();
+	CBotMod *curmod = CBotGlobals::getCurrentMod();
 
 	for ( register short int l = 0; l < size; l ++ )
 	//while ( !tempStack.IsEmpty() )
@@ -517,7 +517,7 @@ void CWaypointLocations :: FindNearestBlastInBucket ( int i, int j, int k, const
 			continue;
 		}
 
-		if ( bCheckArea && !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(curr_wpt->getArea()) )
+		if ( bCheckArea && !curmod->isWaypointAreaValid(curr_wpt->getArea(),curr_wpt->getFlags()) )
 			continue;
 
 		if ( bIsBot )
@@ -611,7 +611,7 @@ void CWaypointLocations :: FindNearestInBucket ( int i, int j, int k, const Vect
 			}
 		}
 
-		if ( bCheckArea && !CTeamFortress2Mod::m_ObjectiveResource.isWaypointAreaValid(curr_wpt->getArea()) )
+		if ( bCheckArea && !curmod->isWaypointAreaValid(curr_wpt->getArea(),curr_wpt->getFlags()) )
 			continue;
 
 		if ( iFlagsOnly != 0 )

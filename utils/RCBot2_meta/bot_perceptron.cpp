@@ -305,21 +305,19 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 			{
 				pOutputNode = m_pHidden[l];
 				//Send Error back to Input Layer
-				for ( i = 0; i < m_numHidden; i ++ )
+				for (i = 0; i < m_numHidden; i++, pOutputNode++ )
 				{	
 					ga_nn_value err = 0;
 
 					pNode = m_pHidden[l+1];
 
-					for ( j = 0; j < m_numHidden; j ++ )
+					for (j = 0; j < m_numHidden; j++, pNode++ )
 					{
 						// check the error from the next layer
-						err += pNode->getError(i);
-						pNode++;
+						err += pNode->getError(i);						
 					}
 
-					pOutputNode->setError((pOutputNode->getOutput() * (1.0f-pOutputNode->getOutput())) * err);
-					pOutputNode ++;
+					pOutputNode->setError((pOutputNode->getOutput() * (1.0f-pOutputNode->getOutput())) * err);					
 				}
 			}
 
@@ -327,10 +325,9 @@ void CBotNeuralNet :: batch_train ( CTrainingSet *tset, unsigned short int epoch
 			{
 				pNode = m_pHidden[j];
 				// update weights for hidden layer (each neuron)
-				for ( i = 0; i < m_numHidden; i ++ )
+				for (i = 0; i < m_numHidden; i++, pNode++ )
 				{	
-					pNode->train(); // update weights for this node
-					pNode++;
+					pNode->train(); // update weights for this node					
 				}
 			}
 

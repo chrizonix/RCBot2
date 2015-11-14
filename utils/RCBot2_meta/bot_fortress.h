@@ -457,7 +457,6 @@ public:
 
 class ITexture;
 class ITextureCompositor;
-
 class CEconItemView
 {
 public:
@@ -471,62 +470,31 @@ public:
 	uint64 m_iItemID; //16
 	uint32 m_iItemIDHigh; //24
 	uint32 m_iItemIDLow; //28
+
 	uint32 m_iAccountID; //32
+
 	uint32 m_iInventoryPosition; //36
 
 	CEconItemHandle m_ItemHandle; //40 (44, 48, 52, 56, 60)
 
-	bool	m_bColorInit; //64
-	uint32	m_unHalloweenRGB; //68
-	uint32	m_unHalloweenAltRGB; //72
-	uint32	m_unRGB; //76
-	uint32	m_unAltRGB; //80
+	bool m_bColorInit; //64
+	bool m_bPaintOverrideInit; //65
+	bool m_bHasPaintOverride; //66
+	//67
 
-	ITexture *m_pWeaponSkinBase; //84
-	ITextureCompositor *m_pWeaponSkinBaseCompositor; //88
+	float m_flOverrideIndex; //68
+	uint32 m_unRGB; //72
+	uint32 m_unAltRGB; //76
 
-	// no love given here
-	uint32 m_Unk1; //92
-	uint32 m_Unk2; //94
-	uint32 m_Unk3; //100
+	int32 m_iTeamNumber; //80
 
-	int32 m_iTeamNumber; //104
+	bool m_bInitialized; //84
 
-	bool m_bInitialized; //108
+	CAttributeList m_AttributeList; //88 (92, 96, 100, 104, 108, 112)
+	CAttributeList m_NetworkedDynamicAttributesForDemos; //116 (120, 124, 128, 132, 136, 140)
 
-	CAttributeList m_AttributeList; //112 (116, 120, 124, 128, 132, 136)
-	CAttributeList m_NetworkedDynamicAttributesForDemos; //140 (144, 148, 152, 156, 160, 164)
-
-	bool m_bDoNotIterateStaticAttributes; //168
+	bool m_bDoNotIterateStaticAttributes; //144
 };
-/*
-class CEconItemView
-{
-public:
-	void *m_pVTable;
-
-	uint16 m_iItemDefinitionIndex;
-	
-	int32 m_iEntityQuality;
-	uint32 m_iEntityLevel;
-
-	uint64 m_iItemID;
-	uint32 m_iItemIDHigh;
-	uint32 m_iItemIDLow;
-	uint32 m_iAccountID;
-	uint32 m_iInventoryPosition;
-
-	void *m_pAlternateItemData;
-	bool m_bInitialized;
-
-	void *m_pVTable_Attributes;
-	CUtlVector<CEconItemAttribute, CUtlMemoryTF2Items<CEconItemAttribute> > m_Attributes;
-	CAttributeManager *m_pAttributeManager;
-	
-	bool m_bDoNotIterateStaticAttributes;
-};*/
-
-
 
 #define EVENT_FLAG_PICKUP 0
 #define EVENT_CAPPOINT    1

@@ -103,6 +103,7 @@ void (CAttributeManager::*OnAttributeValuesChanged)(void) = 0x0;
 void (CBaseEntity::*TF2RemoveWearable)(CBaseEntity*) = 0x0;
 void (CBaseEntity::*TF2RemovePlayerItem)(CBaseEntity*) = 0x0;
 void (CBaseEntity::*TF2WeaponEquip)(CBaseEntity*) = 0x0;
+CAttributeList *(CBaseEntity::*TF2GetAttributeList)(void) = 0x0;
 
 IServerGameDLL *server = NULL;
 IGameEventManager2 *gameevents = NULL;
@@ -189,7 +190,18 @@ CON_COMMAND(rcbot_setattrib, "set an attribute")
 	if (args.ArgC() > 2)
 	{		
 		edict_t *pPlayer = CClients::getListenServerClient();
+		/*CBaseEntity *pEntity = pPlayer->GetUnknown()->GetBaseEntity();
+		
 
+		CBaseEntity *pEnt = servergameents->EdictToBaseEntity(pPlayer);
+		unsigned int *mem = (unsigned int*)*(unsigned int*)pEnt;
+		int offset = 473;
+		
+		*(unsigned int*)&TF2GetAttributeList = mem[offset];
+
+		CAttributeList *pList = (*pEnt.*TF2GetAttributeList)();
+		*/
+		
 		CBaseEntity *pEntity = RCBotPluginMeta::TF2_getPlayerWeaponSlot(pPlayer, TF2_SLOT_PRMRY);
 
 		if (pEntity != NULL)
@@ -888,6 +900,7 @@ bool RCBotPluginMeta::Load(PluginId id, ISmmAPI *ismm, char *error, size_t maxle
 	g_pAttribList_GetAttributeByID = new CAttributeList_GetAttributeByID(pKVL, gameServerFactory);
 	g_pGameRules_Obj = new CGameRulesObject(pKVL, gameServerFactory);
 	g_pGameRules_Create_Obj = new CCreateGameRulesObject(pKVL, gameServerFactory);
+	g_pGetAttributeDefinitionByID = new CGetAttributeDefinitionByID(pKVL, gameServerFactory);
 
 	delete pKVL;
 
@@ -1052,7 +1065,7 @@ bool RCBotPluginMeta::Unload(char *error, size_t maxlen)
 	CBotProfiles::deleteProfiles();
 	CWeapons::freeMemory();
 	CBotMenuList::freeMemory();
-
+	CAttributeLookup::freeMemory();
 	//unloadSignatures();
 
 	//UnhookPlayerRunCommand();
@@ -1478,7 +1491,7 @@ const char *RCBotPluginMeta::GetLicense()
 
 const char *RCBotPluginMeta::GetVersion()
 {
-	return "1.00 (r473)";
+	return "1.00 (r480)";
 }
 
 const char *RCBotPluginMeta::GetDate()

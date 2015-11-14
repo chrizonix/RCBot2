@@ -777,6 +777,7 @@ public:
 
 	CBotWeapon *getPrimaryWeapon (); // return the most important weapon bot is holding if if out o ammo
 
+	inline void resetSignature() { m_iWeaponsSignature = 0; }
 private:
 	// bot that has these weapons
 	CBot *m_pBot;

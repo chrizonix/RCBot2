@@ -344,6 +344,7 @@ bool CBot :: createBotFromEdict(edict_t *pEdict, CBotProfile *pProfile)
 	CBotGlobals::botMessage(NULL, 0, "VisionTicksClients: %d", m_pProfile->m_iVisionTicksClients);
 	CBotGlobals::botMessage(NULL, 0, "===================================");
 
+
 	engine->SetFakeClientConVarValue(pEdict,"cl_team","default");
 	engine->SetFakeClientConVarValue(pEdict,"cl_defaultweapon","pistol");
 	engine->SetFakeClientConVarValue(pEdict,"cl_autowepswitch","1");	
@@ -888,6 +889,17 @@ void CBot :: think ()
 	m_bWantToChangeWeapon = true;
 
 
+	setMoveLookPriority(MOVELOOK_MODTHINK);
+#ifdef _DEBUG
+	if (rcbot_debug_iglev.GetInt() != 10)
+	{
+#endif
+		modThink();
+#ifdef _DEBUG
+	}
+#endif
+	setMoveLookPriority(MOVELOOK_THINK);
+
 	//
 	if ( !rcbot_debug_notasks.GetBool() )
 	{
@@ -899,6 +911,8 @@ void CBot :: think ()
 	}
 #ifdef _DEBUG
 	}
+
+
 
 	if ( rcbot_debug_iglev.GetInt() != 7 )
 	{
@@ -986,15 +1000,6 @@ void CBot :: think ()
 	}
 #endif
 
-	setMoveLookPriority(MOVELOOK_MODTHINK);
-#ifdef _DEBUG
-	if ( rcbot_debug_iglev.GetInt() != 10 )
-	{
-#endif
-	modThink();
-#ifdef _DEBUG
-	}
-#endif
 
 #ifdef _DEBUG
 	if ( rcbot_debug_iglev.GetInt() != 11 )
@@ -1915,8 +1920,8 @@ void CBot :: updateStatistics ()
 	}
 
 	edict_t *pPlayer = INDEXENT(m_iStatsIndex++);
-
-	if (!pPlayer || !pPlayer->IsFree())
+	 
+	if (!pPlayer || pPlayer->IsFree())
 		return; // not valid
 
 	if ( pPlayer == m_pEdict )
