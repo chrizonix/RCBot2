@@ -38,6 +38,7 @@ MOD_DIR=$(GAME_DIR)/
 #CC=/usr/bin/gcc
 #CPLUS=/usr/bin/g++-4.1
 #CLINK=/usr/bin/gcc-4.1
+#CPP_LIB=" /usr/lib/gcc/x86_64-redhat-linux/5.1.1/32/libstdc++.a /usr/lib/gcc/x86_64-redhat-linux/5.1.1/32/libgcc_eh.a"
 CPP_LIB=" /usr/lib/gcc/i686-linux-gnu/4.7/libstdc++.a /usr/lib/gcc/i686-linux-gnu/4.7/libgcc_eh.a"
 C = /usr/bin/gcc
 CPLUS = /usr/bin/g++
