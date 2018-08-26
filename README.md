@@ -4,6 +4,9 @@
 This is a fork of the official RCBot2 plugin written by Cheeseh, which can be found [here](http://rcbot.bots-united.com/). <br />
 This repository is mainly used for the Linux release of his plugin, but it also works on Windows.
 
+### Community
+Cheeseh also got his own GitHub repository, which can be found here: https://github.com/rcbotCheeseh/rcbot2
+
 ### Installation
 A complete guide for installing this plugin can be found at the official RCBot2 forums over [here](http://rcbot.bots-united.com/forums/index.php?showtopic=1967). <br />
 This thread is also maintained by me.
